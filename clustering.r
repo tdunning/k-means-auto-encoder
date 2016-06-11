@@ -44,31 +44,45 @@ reconstruction.error = function(data, k) {
 }
 
 k.10 = kmeans(train.data, centers=10, nstart=10, iter.max=50)
-k.20 = kmeans(train.data, centers=20, nstart=10, iter.max=50)
-k.50 = kmeans(train.data, centers=50, nstart=10, iter.max=50)
-k.100 = kmeans(train.data, centers=100, nstart=10, iter.max=50)
-k.200 = kmeans(train.data, centers=200, nstart=10, iter.max=50)
-k.500 = kmeans(train.data, centers=500, nstart=10, iter.max=50)
-k.1000 = kmeans(train.data, centers=1000, nstart=5, iter.max=50)
-k.2000 = kmeans(train.data, centers=2000, nstart=3, iter.max=50)
-
 x.10 = reconstruction.error(train.data, k.10)
-x.20 = reconstruction.error(train.data, k.20)
-x.50 = reconstruction.error(train.data, k.50)
-x.100 = reconstruction.error(train.data, k.100)
-x.200 = reconstruction.error(train.data, k.200)
-x.500 = reconstruction.error(train.data, k.500)
-x.1000 = reconstruction.error(train.data, k.1000)
-x.2000 = reconstruction.error(train.data, k.2000)
-
 y.10 = reconstruction.error(test.data, k.10)
+print(10)
+
+k.20 = kmeans(train.data, centers=20, nstart=10, iter.max=50)
+x.20 = reconstruction.error(train.data, k.20)
 y.20 = reconstruction.error(test.data, k.20)
+print(20)
+
+k.50 = kmeans(train.data, centers=50, nstart=10, iter.max=50)
+x.50 = reconstruction.error(train.data, k.50)
 y.50 = reconstruction.error(test.data, k.50)
+print(50)
+
+k.100 = kmeans(train.data, centers=100, nstart=10, iter.max=50)
+x.100 = reconstruction.error(train.data, k.100)
 y.100 = reconstruction.error(test.data, k.100)
+print(100)
+
+k.200 = kmeans(train.data, centers=200, nstart=10, iter.max=50)
+x.200 = reconstruction.error(train.data, k.200)
 y.200 = reconstruction.error(test.data, k.200)
+print(200)
+
+k.500 = kmeans(train.data, centers=500, nstart=10, iter.max=50)
+x.500 = reconstruction.error(train.data, k.500)
 y.500 = reconstruction.error(test.data, k.500)
+print(500)
+
+k.1000 = kmeans(train.data, centers=1000, nstart=5, iter.max=50)
+x.1000 = reconstruction.error(train.data, k.1000)
 y.1000 = reconstruction.error(test.data, k.1000)
+print(1000)
+
+k.2000 = kmeans(train.data, centers=2000, nstart=3, iter.max=50)
+x.2000 = reconstruction.error(train.data, k.2000)
 y.2000 = reconstruction.error(test.data, k.2000)
+print(2000)
+
 
 pdf(file="points.pdf", width=5, height=5)
 plot(c(10,20,50,100,200,500,1000, 2000), 
@@ -96,5 +110,5 @@ plot(err~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube
      lwd=2, ylim=c(0,2))
 lines(x$k,1/predict(m, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
       lwd=2, lty=4, col='red')
-legend(1200, 1.8, legend=c("Actual", "Cube root"), col=c("black", "red"), pch=21)
+legend(1200, 1.8, legend=c("Actual", "Cube root"), col=c("black", "red"), pch=21, lwd=2)
 dev.off()
