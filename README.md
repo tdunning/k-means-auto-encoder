@@ -24,3 +24,28 @@ To decode the resulting index and magnitude back to a time series, the index is 
 
 As with the random points, having more clusters results in lower error, but the time series appears to be somewhat simpler in that error decreases more rapidly with increasing `k` than for the random points.
 
+# The figures
+
+`cube-root.pdf` - shows how closely the accuracy versus cluster count follows theoretical considerations.
+
+`points.pdf` - shows the error versus number of clusters for training and test data in the case of randomly distributed points.
+
+`time-series.pdf` - shows the error versus number of clusters for training and test data in the case of time series data.
+
+`time-series-reconstruction.pdf` - shows how well the reconstructed signal (red) matches the original test signal (in black). The blue line that is offset down by 1 shows the reconstruction error.
+
+# Running the code
+To run the code and regenerate the figures, make sure you have R installed and then run the following commands:
+
+    $ Rscript clustering.r
+    $ Rscript time-series.r
+
+These scripts should take less than a minute to run. On a mac, you can then do this to open all of the figures in `Preview`:
+
+    $ open *.pdf
+
+The code should be well enough commented to follow, especially with reference to this README and the associated blog. If you have problems, send me a question at one of the following addresses:
+
+    @ted_dunning
+    tdunning@maprtech.com
+    ted.dunning@gmail.com

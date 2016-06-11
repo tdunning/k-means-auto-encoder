@@ -24,6 +24,8 @@ test.data = xform(raw.test, w1, w2)
 
 ### The encoder simply finds the nearest centroids
 closest = function(v, k) {
+    ## This is same as (centers - v)^2 but works with matrix centers and vector v
+    ## numerical stability is probably poor
     distances = rowSums(k$centers^2) + sum(v^2) - 2 * k$centers %*% v
     close = min(distances)
     which(distances == close)
