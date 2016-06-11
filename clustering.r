@@ -84,6 +84,15 @@ lines(c(10,20,50,100,200,500,1000,2000),
 legend(1000, 1.9, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
 dev.off()
 
-plot(inv~exp(log(n)*0.33333),x,type='b', xlab="k", ylab="1/error", main="Error is approximately cube root of k",
-     lwd=2, ylim=c(0,3), xlim=c(0,13))
-abline(lm(inv ~ rootK, x[1:4,]), lty=3)
+pdf(file="cube-root.pdf", width=5, height=5)
+x = data.frame(k = c(10,20,50,100,200,500,1000,2000), err = c(x.10, x.20, x.50, x.100, x.200, x.500, x.1000, x.2000))
+x$inv = 1/x$err
+x$rootK = exp(log(x$k)/3)
+
+m = lm(inv ~ rootK, x[1:4,])
+plot(err~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube root of k",
+     lwd=2, ylim=c(0,2))
+lines(x$k,1/predict(m, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
+      lwd=2, lty=4, col='red')
+legend(1200, 1.8, legend=c("Actual", "Cube root"), col=c("black", "red"), pch=21)
+dev.off()

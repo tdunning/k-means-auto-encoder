@@ -118,10 +118,13 @@ print(2000)
 pdf(file="time-series.pdf", width=5, height=5)
 plot(c(10,100,200,500,1000,2000), c(x.10, x.100, x.200, x.500, x.1000, x.2000), 
      type='b', lwd=2, xlab="Centroids", ylab="MAV Error",
-     ylim=c(0,0.15))
+     ylim=c(0,0.15),
+     main="Reconstruction error for time-series data")
 
 lines(c(10,100,200,500,1000,2000), c(y.10, y.100, y.200, y.500, y.1000, y.2000), 
      type='b', lwd=2, col='red')
+
+legend(1000, 0.15, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
 dev.off()
 
                                              
