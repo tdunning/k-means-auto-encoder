@@ -110,7 +110,7 @@ training.data = generate(10000, v.1, v.2)
 test.data = generate(10000, v.1, v.2)
 
 ## Go ahead and window once to help with all the clustering
-rx = apply(window(training.data), 1, function(v){v/mag(v)})
+rx = t(apply(window(training.data), 1, function(v){v/(1e-100+mag(v))}))
 
 k.10 = kmeans(rx, centers=10, nstart=10)
 c.10 = apply(k.10$centers,1,function(v){v/mag(v)})
@@ -148,28 +148,53 @@ x.2000 = reconstruction.error(training.data, c.2000)
 y.2000 = reconstruction.error(test.data, c.2000)
 print(2000)
 
+
+reconstruct.plot = function () {
+    plot(test.data[1:2000], type='l', xlab="Time", ylab=NA, main="Time series training data (first 2000 samples)",
+         lwd=3)
+    rex = window(test.data)
+    re.data = decode(encode(rex, c.1000), c.1000)
+    lines(15 + 1:2000, re.data[1:2000], col='red')
+    lines(15 + 1:2000, test.data[15+1:2000]-re.data[1:2000]-1, col='blue')
+    legend(800, 2.2, legend=c("Test data", "Reconstruction", "Error"), col=c("black", "red", "blue"), pch=21, lty=1, cex=0.8)
+}
+
+time.series.error.plot = function() {
+    plot(c(10,100,200,500,1000,2000), c(x.10, x.100, x.200, x.500, x.1000, x.2000), 
+         type='b', lwd=2, xlab="Centroids", ylab="MAV Error",
+         ylim=c(0,0.15),
+         main="Reconstruction error for time-series data")
+
+    lines(c(10,100,200,500,1000,2000), c(y.10, y.100, y.200, y.500, y.1000, y.2000), 
+          type='b', lwd=2, col='red')
+
+    legend(1000, 0.15, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
+}
+
+time.series.plot = function() {
+    plot(training.data[1:2000], type='l', xlab="Time", ylab=NA, main="Time series training data (first 2000 samples)")
+}
+
 pdf(file="time-series-errors.pdf", width=5, height=5)
-plot(c(10,100,200,500,1000,2000), c(x.10, x.100, x.200, x.500, x.1000, x.2000), 
-     type='b', lwd=2, xlab="Centroids", ylab="MAV Error",
-     ylim=c(0,0.15),
-     main="Reconstruction error for time-series data")
-
-lines(c(10,100,200,500,1000,2000), c(y.10, y.100, y.200, y.500, y.1000, y.2000), 
-     type='b', lwd=2, col='red')
-
-legend(1000, 0.15, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
+time.series.error.plot()
+dev.off()
+                                             
+png(file="images/time-series-errors.png", width=400, height=400)
+time.series.error.plot()
 dev.off()
                                              
 pdf(file="time-series.pdf", width=5, height=5)
-plot(training.data[1:2000], type='l', xlab="Time", ylab=NA, main="Time series training data (first 2000 samples)")
+time.series.plot()
+dev.off()
+
+png(file="images/time-series.png", width=400, height=400)
+time.series.plot()
 dev.off()
 
 pdf(file="time-series-reconstruction.pdf", width=5, height=5)
-plot(test.data[1:2000], type='l', xlab="Time", ylab=NA, main="Time series training data (first 2000 samples)",
-     lwd=3)
-rex = window(test.data)
-re.data = decode(encode(rex, c.1000), c.1000)
-lines(15 + 1:2000, re.data[1:2000], col='red')
-lines(15 + 1:2000, test.data[15+1:2000]-re.data[1:2000]-1, col='blue')
-legend(800, 2.2, legend=c("Test data", "Reconstruction", "Error"), col=c("black", "red", "blue"), pch=21, lty=1, cex=0.8)
+reconstruct.plot()
+dev.off()
+
+png(file="images/time-series-reconstruction.png", width=400, height=400)
+reconstruct.plot()
 dev.off()

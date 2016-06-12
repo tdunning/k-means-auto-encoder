@@ -99,31 +99,43 @@ y.2000 = reconstruction.error(test.data, k.2000)
 print(2000)
 
 
-pdf(file="points.pdf", width=5, height=5)
-plot(c(10,20,50,100,200,500,1000, 2000), 
+points.fig = function() {
+    plot(c(10,20,50,100,200,500,1000, 2000), 
      c(x.10, x.20, x.50, x.100, x.200, x.500, x.1000, x.2000),
      ylab="Error", xlab="Centroids", type='b',
      ylim=c(0,2), lwd=2,
      main="Reconstruction error for random points"
      )
-    
 
-lines(c(10,20,50,100,200,500,1000,2000), 
-      c(y.10, y.20,  y.50,  y.100,  y.200,  y.500,  y.1000,  y.2000),
-      col='red', lwd=2, type='b')
+    lines(c(10,20,50,100,200,500,1000,2000), 
+          c(y.10, y.20,  y.50,  y.100,  y.200,  y.500,  y.1000,  y.2000),
+          col='red', lwd=2, type='b')
 
-legend(1000, 1.9, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
+    legend(1000, 1.9, legend=c("Training data", "Held-out data"), col=c("black", "red"), pch=21, lwd=2)
+}
+
+cube.root.fig = function() {
+    m = lm(inv ~ rootK, x[1:4,])
+    plot(err~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube root of k",
+         lwd=2, ylim=c(0,2))
+    lines(x$k,1/predict(m, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
+          lwd=2, lty=4, col='red')
+    legend(1000, 1.8, legend=c("Actual", "Cube root model"), col=c("black", "red"), pch=21, lwd=2)
+}
+
+pdf(file="points.pdf", width=5, height=5)
+points.fig()
+dev.off()
+
+png(file="images/points.png", width=400, height=400, pointsize=12)
+points.fig()
 dev.off()
 
 pdf(file="cube-root.pdf", width=5, height=5)
-x = data.frame(k = c(10,20,50,100,200,500,1000,2000), err = c(x.10, x.20, x.50, x.100, x.200, x.500, x.1000, x.2000))
-x$inv = 1/x$err
-x$rootK = exp(log(x$k)/3)
-
-m = lm(inv ~ rootK, x[1:4,])
-plot(err~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube root of k",
-     lwd=2, ylim=c(0,2))
-lines(x$k,1/predict(m, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
-      lwd=2, lty=4, col='red')
-legend(1200, 1.8, legend=c("Actual", "Cube root"), col=c("black", "red"), pch=21, lwd=2)
+cube.root.fig()
 dev.off()
+
+png(file="images/cube-root.png", width=400, height=400, pointsize=12)
+cube.root.fig()
+dev.off()
+
