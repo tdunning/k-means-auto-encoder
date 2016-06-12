@@ -26,14 +26,12 @@ To decode the resulting index and magnitude back to a time series, the index is 
 As with the random points, having more clusters results in lower error, but the time series appears to be somewhat simpler in that error decreases more rapidly with increasing _k_ than for the random points.
 
 ## The figures
-
-`cube-root.pdf` - shows how closely the accuracy versus cluster count follows theoretical considerations.
-
-`points.pdf` - shows the error versus number of clusters for training and test data in the case of randomly distributed points.
-
-`time-series.pdf` - shows the error versus number of clusters for training and test data in the case of time series data.
-
-`time-series-reconstruction.pdf` - shows how well the reconstructed signal (red) matches the original test signal (in black). The blue line that is offset down by 1 shows the reconstruction error.
+| Image | Description |
+| --- | --- |
+| <img src='images/cube-root.png'> | `cube-root.pdf` - shows how closely the accuracy versus cluster count follows theoretical considerations. The fit is very good except when the number of clusters becomes large with respect to the number of data points.|
+|<img src='images/points.png'> | `points.pdf` - shows the error versus number of clusters for training and test data in the case of randomly distributed points. The error on the test data is larger than the training data, but continues to decrease with increasing number of clusters. This indicates some over-fitting is happening, but that large number of clusters are still improving the fit to new data.|
+|<image src='images/time-series.png'> | `time-series.pdf` - shows the error versus number of clusters for training and test data in the case of time series data. This is very similar to the case for randomly chosen data points, but the shape of the curve indicates a lower dimension for the embedded data. You can't actually tell the different shape by eye, but it becomes apparent when fitting the data.|
+|<image src='images/time-series-reconstruction.png'>|`time-series-reconstruction.pdf` - shows how well the reconstructed signal (red) matches the original test signal (in black). The blue line shows the reconstruction error. To avoid obscuring the features of the blue line, it is offset by 1 unit downwards.|
 
 ## Running the code
 To run the code and regenerate the figures, make sure you have R installed and then run the following commands:
