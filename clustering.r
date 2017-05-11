@@ -115,12 +115,24 @@ points.fig = function() {
 }
 
 cube.root.fig = function() {
-    m = lm(inv ~ rootK, x[1:4,])
-    plot(err~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube root of k",
+    x = data.frame(
+        k=c(10, 20,  50,  100,  200,  500,  1000,  2000),
+        test=c(y.10, y.20,  y.50,  y.100,  y.200,  y.500,  y.1000,  y.2000),
+        train=c(x.10, x.20,  x.50,  x.100,  x.200,  x.500,  x.1000,  x.2000))
+    x$rootK = x$k^(1/3)
+    x$inv.train = 1/x$train
+    x$inv.test = 1/x$test
+    m.train = lm(inv.train ~ rootK, x)
+    m.test = lm(inv.test ~ rootK, x)
+
+    plot(train~k,x,type='b', xlab="k", ylab="Error", main="Error is approximately cube root of k",
          lwd=2, ylim=c(0,2))
-    lines(x$k,1/predict(m, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
+    lines(test~k,x,type='b', col='darkgray', lwd=2)
+    lines(x$k,1/predict(m.train, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
           lwd=2, lty=4, col='red')
-    legend(1000, 1.8, legend=c("Actual", "Cube root model"), col=c("black", "red"), pch=21, lwd=2)
+    lines(x$k,1/predict(m.test, newdata=data.frame(rootK=exp(log(x$k)*0.33333))),
+          lwd=2, lty=4, col='red')
+    legend(1000, 1.8, legend=c("Training data", "Test data", "Cube root model"), col=c("black", "darkgray", "red"), pch=21, lwd=2)
 }
 
 pdf(file="points.pdf", width=5, height=5)
